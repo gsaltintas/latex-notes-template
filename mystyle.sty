@@ -1,0 +1,211 @@
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mystyle}[2025/01/01 Custom color and listings style]
+
+% ===== Required packages =====
+\RequirePackage[dvipsnames,table]{xcolor}
+\RequirePackage{listings}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{fontawesome}
+\RequirePackage{emoji}
+
+% ===== Base palette =====
+\definecolor{DeepPurple}{HTML}{5B2C87}
+\definecolor{SoftPurple}{HTML}{9B7EDE}
+\definecolor{Lavender}{HTML}{C9B8E8}
+
+\definecolor{OceanBlue}{HTML}{2E6F95}
+\definecolor{CalmBlue}{HTML}{6FA8C9}
+\definecolor{SkyBlue}{HTML}{AED4E6}
+
+\definecolor{ForestGreen}{HTML}{3D7A5C}
+\definecolor{SageGreen}{HTML}{81B29A}
+\definecolor{MintGreen}{HTML}{B8DCC9}
+
+\definecolor{SlateGray}{HTML}{4A4A58}
+\definecolor{PaleGray}{HTML}{EDEDF2}
+\definecolor{Amber}{HTML}{C98A2C}
+\definecolor{Teal}{HTML}{2A9D8F}
+
+% ===== Semantic color roles =====
+
+\colorlet{PrimaryColor}{DeepPurple}      % main brand/heading color
+\colorlet{SecondaryColor}{OceanBlue}   % secondary emphasis, subheadings
+\colorlet{AccentColor}{ForestGreen}     % callouts, highlights, key results
+
+\colorlet{PrimaryLight}{SkyBlue}        % lighter tint of primary, backgrounds
+\colorlet{SecondaryLight}{Lavender}     % lighter tint of secondary
+\colorlet{AccentLight}{MintGreen}       % lighter tint of accent
+
+\colorlet{TextColor}{SlateGray}         % body text, if not pure black
+\colorlet{BackgroundColor}{PaleGray}    % shaded boxes, tables, code blocks
+
+% Optional: link colors (pairs well with hyperref)
+\colorlet{CiteColor}{DeepPurple}
+\colorlet{LinkColor}{ForestGreen}
+\colorlet{URLColor}{OceanBlue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% colors-end
+
+
+% ===== Listings style =====
+\lstdefinestyle{beautiful}{
+    frame=single,
+    rulecolor=\color{PrimaryColor},
+    framerule=0.8pt,
+    backgroundcolor=\color{BackgroundColor},
+    xleftmargin=1.5em,
+    xrightmargin=0.5em,
+    framexleftmargin=1em,
+    breaklines=true,
+    breakatwhitespace=true,
+    % prebreak=\textcolor{SecondaryColor}{$\textbackslash$},   
+    prebreak=\raisebox{0ex}[0ex][0ex]{\textcolor{SecondaryColor}{\textbackslash{}}}, % Symbol at the end of the broken line
+    % postbreak=\mbox{\textcolor{SecondaryColor}{$\hookrightarrow$}\space},
+    numbers=left,
+    numberstyle=\tiny\color{SlateGray},
+    numbersep=8pt,
+    stepnumber=1,
+    basicstyle=\ttfamily\small\color{TextColor},
+    keywordstyle=\bfseries\color{PrimaryColor},
+    commentstyle=\itshape\color{AccentColor},
+    stringstyle=\color{SecondaryColor},
+    identifierstyle=\color{TextColor},
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=t,
+    columns=flexible,
+    keepspaces=true,
+    escapeinside={(*}{*)},
+}
+
+\lstset{style=beautiful}
+
+% ===== Question box =====
+\newtcolorbox[auto counter, number within=section]{questionbox}[1][]{
+    enhanced,breakable,
+    colback=PrimaryLight!30,
+    colframe=PrimaryColor,
+    colbacktitle=PrimaryColor,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{red-question-mark} Question~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=PrimaryColor, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Confusion / uncertainty box =====
+\newtcolorbox[auto counter, number within=section]{confusionbox}[1][]{
+    enhanced,breakable,
+    colback=SecondaryLight!30,
+    colframe=SecondaryColor,
+    colbacktitle=SecondaryColor,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{face-with-spiral-eyes} Confusion~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=SecondaryColor, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Research question box =====
+\newtcolorbox[auto counter, number within=section]{rqbox}[1][]{
+    enhanced,breakable,
+    colback=AccentLight!30,
+    colframe=AccentColor,
+    colbacktitle=AccentColor,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{woman-detective} Research Question~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=AccentColor, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Hypothesis box =====
+\newtcolorbox[auto counter, number within=section]{hypothesisbox}[1][]{
+    enhanced,breakable,
+    colback=SageGreen!30,
+    colframe=SageGreen,
+    colbacktitle=SageGreen,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{crystal-ball} Hypothesis~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=SageGreen, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Emphasis box (unchanged — no numbering, purely visual callout) =====
+\newtcolorbox{emphbox}[1][]{
+    enhanced,breakable,
+    colback=BackgroundColor,
+    colframe=TextColor,
+    boxrule=1pt,
+    left=1em, right=1em, top=0.8em, bottom=0.8em,
+    sharp corners,
+    #1
+}
+
+% ===== Experiment box =====
+% For describing a planned or completed experiment, its setup, and what it tests
+\newtcolorbox[auto counter, number within=section]{experimentbox}[1][]{
+    enhanced,breakable,
+    colback=CalmBlue!30,
+    colframe=CalmBlue,
+    colbacktitle=CalmBlue,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{test-tube} Experiment~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=CalmBlue, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Result box =====
+% For reporting empirical findings, measured outcomes, or experiment results
+\newtcolorbox[auto counter, number within=section]{resultbox}[1][]{
+    enhanced,breakable,
+    colback=Teal!30,
+    colframe=Teal,
+    colbacktitle=Teal,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\emoji{bar-chart} Result~\thetcbcounter},
+    attach boxed title to top left={xshift=1em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={boxrule=0pt, colframe=Teal, sharp corners},
+    top=1.5em,
+    #1
+}
+
+% ===== Comment / dialogue command =====
+% Usage: \commentbox[GS]{Revisit this after the ablation.}
+%        \commentbox{No attribution, falls back to "Comment"}
+\NewDocumentCommand{\commentbox}{ O{Comment} m }{%
+    \par\noindent
+    \begin{tcolorbox}[
+        enhanced, breakable,
+        colback=PaleGray,
+        colframe=SlateGray,
+        coltitle=white,
+        fonttitle=\bfseries,
+        colbacktitle=SlateGray,
+        top=0.3em, bottom=0.3em, left=0.5em, right=0.5em,
+        boxsep=2pt,
+        title={\emoji{speech-balloon}~#1},
+        titlerule=0pt,
+        width=\linewidth,
+        halign=left,
+    ]
+    #2
+    \end{tcolorbox}
+    \par\noindent\ignorespaces
+}
+
+\endinput
