@@ -208,4 +208,76 @@
     \par\noindent\ignorespaces
 }
 
+
+
+%%%%%%%% begin - for the research question/emph env %%%%%%%%
+\usepackage{pgffor}
+\newcounter{question}
+\renewcommand{\thequestion}{\arabic{question}}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\makeatletter
+\newcommand{\saveqcolor}[2]{%
+  \global\@namedef{qcolor@#1}{#2}}
+\newif\ifquestionleft
+
+\newenvironment{question}[2][center]{%
+  % #1 = alignment (center/left), #2 = color
+  \refstepcounter{question}%
+  \ifstrequal{#1}{left}%
+    {\questionlefttrue}%
+    {\questionleftfalse}%
+  \ifquestionleft
+    \par\noindent
+    \textbf{\color{#2}\arabic{question}}\quad
+    % \textbf{\color{#2}Q.\arabic{question}}\quad
+    \itshape\color{#2}\ignorespaces
+  \else
+    \begin{center}
+    \itshape\color{#2}%
+    \textbf{\color{#2}\arabic{question}}\quad\ignorespaces
+    % \textbf{\color{#2}Q.\arabic{question}}\quad\ignorespaces
+  \fi
+}{%
+  \ifquestionleft
+    \ignorespacesafterend
+  \else
+    \end{center}\ignorespacesafterend
+  \fi
+}
+% Redefine \label to also save the color when inside question
+\let\origlabel\label
+\renewcommand{\label}[1]{%
+  \origlabel{#1}%
+  \ifcsname qenvcolor\endcsname
+    \protected@write\@auxout{}{\string\saveqcolor{#1}{\qenvcolor}}%
+  \fi}
+
+\newcommand{\qref}[1]{%
+  % Count items first
+  \def\qref@count{0}%
+  \foreach \lbl in {#1} {\xdef\qref@count{\the\numexpr\qref@count+1}}%
+  % Print "Q." prefix once
+  %% uncomment if you want a Q prefix
+  % Q.%
+  % Now print numbers with correct separators
+  \def\qref@i{0}%
+  \foreach \lbl in {#1} {%
+    \xdef\qref@i{\the\numexpr\qref@i+1}%
+    \ifnum\qref@i=1\relax
+    \else\ifnum\qref@i=\qref@count\relax
+      \ifnum\qref@count>2 , \fi and %
+    \else
+      , %
+    \fi\fi
+    \begingroup\hypersetup{hidelinks}%
+    \textcolor{\@nameuse{qcolor@\lbl}}{\hyperref[\lbl]{\ref*{\lbl}}}%
+    \endgroup
+  }%
+}
+%%%%%%%% end - for the research question/emph env %%%%%%%%
+
 \endinput
